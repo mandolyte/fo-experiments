@@ -1,0 +1,27 @@
+package main
+
+import "fmt"
+
+
+func reverseArray[T](a []T) {
+	i := 0
+	u := len(a) - 1
+	for i < u {
+		a[i], a[u] = a[u], a[i]
+		i, u = i+1, u-1
+	}
+}
+
+func main() {
+	ia := []int{1,2,3} 
+	reverseArray[int](ia)
+	fmt.Println(ia)
+
+	sa := []string{"a", "b", "c"}
+	reverseArray[string](sa)
+	fmt.Println(sa)
+
+	ra := []float64{1.1, 2.2, 3.3}
+	reverseArray[float64](ra)
+	fmt.Println(ra)
+}
