@@ -1,12 +1,17 @@
 package main
 
-import "fmt"
+import "log"
 
 type Node[T] struct {
 	data T
 	next *Node[T]
 	prev *Node[T]
 }
+
+func (n *Node[T]) Value() T {
+	return n.data
+}
+
 
 type LinkedList[T] struct {
 	head *Node[T]
@@ -18,6 +23,17 @@ func (list *LinkedList[T]) GetFirst() (*Node[T], bool) {
 		return list.head, false
 	}
 	return list.head, true
+}
+
+func (list *LinkedList[T]) GetLast() (*Node[T], bool) {
+	if list.head == nil {
+		return list.head, false
+	}
+	current := list.head
+	for current.next != nil {
+		current = current.next
+	}
+	return current, true
 }
 
 func (list *LinkedList[T]) InsertFirst(i T) {
@@ -69,19 +85,17 @@ func (list *LinkedList[T]) GetItemsFromStart() []T {
 	return items
 }
 
-func main() {
-	lli := &LinkedList[int] {head: nil, tail: nil}
-	lli.InsertFirst(1)
-	lli.InsertLast(11)
-	fmt.Printf("Size of list is:%v\n", lli.GetSize())
-	items := lli.GetItemsFromStart()
-	for i := range items {
-		fmt.Printf("Item %v=%v\n",i,items[i])
+func (list *LinkedList[T]) GetItemsFromEnd() []T {
+	var items []T
+	current := list.tail
+	for current != nil {
+		items = append(items, current.data)
+		current = current.prev
 	}
+	return items
 }
 
-/*
-func (list *LinkedList) RemoveByValue(i int) bool {
+func (list *LinkedList[T]) RemoveByValue(i T) bool {
 	if list.head == nil {
 		return false
 	}
@@ -109,7 +123,7 @@ func (list *LinkedList) RemoveByValue(i int) bool {
 	return false
 }
 
-func (list *LinkedList) RemoveByIndex(i int) bool {
+func (list *LinkedList[T]) RemoveByIndex(i int) bool {
 	if list.head == nil {
 		return false
 	}
@@ -135,7 +149,7 @@ func (list *LinkedList) RemoveByIndex(i int) bool {
 	return true
 }
 
-func (list *LinkedList) SearchValue(i int) bool {
+func (list *LinkedList[T]) SearchValue(i T) bool {
 	if list.head == nil {
 		return false
 	}
@@ -149,52 +163,181 @@ func (list *LinkedList) SearchValue(i int) bool {
 	return false
 }
 
-func (list *LinkedList) GetFirst() (int, bool) {
-	if list.head == nil {
-		return 0, false
-	}
-	return list.head.data, true
+func main() {
+	do_int()
+	do_float()
+	do_string()
 }
 
-func (list *LinkedList) GetLast() (int, bool) {
-	if list.head == nil {
-		return 0, false
-	}
-	current := list.head
-	for current.next != nil {
-		current = current.next
-	}
-	return current.data, true
-}
-
-func (list *LinkedList) GetSize() int {
-	count := 0
-	current := list.head
-	for current != nil {
-		count += 1
-		current = current.next
+func do_int() {
+	log.Println("\n----- Int Tests -----")
+	lli := &LinkedList[int] {head: nil, tail: nil}
+	lli.InsertFirst(1)
+	lli.InsertLast(3)
+	lli.InsertLast(5)
+	lli.InsertLast(7)
+	log.Printf("Size of list is:%v\n", lli.GetSize())
+	x, ok := lli.GetFirst()
+	if ok {
+		log.Printf("Head value is: %v\n", x.Value())
+	} else {
+		log.Fatal("Head is missing")
 	}
 
-	return count
+	x, ok = lli.GetLast()
+	if ok {
+		log.Printf("Tail value is: %v\n", x.Value())
+	} else {
+		log.Fatal("Tail is missing")
+	}
+
+	log.Print("All items from head\n")
+	items := lli.GetItemsFromStart()
+	for i := range items {
+		log.Printf("Item %v=%v\n",i,items[i])
+		if ! lli.SearchValue(items[i]) {
+			log.Fatalf("Error! value %v not found\n",items[i])
+		}
+	}
+
+	if lli.SearchValue(-1) {
+		log.Fatalf("Error! non-existent value found: %v\n", -1)
+	}
+
+	log.Print("All items from tail (backwards)\n")
+	items = lli.GetItemsFromEnd()
+	for i := range items {
+		log.Printf("Item %v=%v\n",i,items[i])
+	}
+
+	// remove middle two values
+	if ok = lli.RemoveByIndex(1); !ok {
+		log.Fatal("Error! lli.RemoveByIndex(1)\n")
+	}
+
+	if ok = lli.RemoveByValue(5); !ok {
+		log.Fatal("Error! lli.RemoveByValue(5)\n")
+	}
+
+	log.Print("Final items after removals (should be 1 and 7)\n")
+	items = lli.GetItemsFromStart()
+	for i := range items {
+		log.Printf("Item %v=%v\n",i,items[i])
+	}
 }
 
-func (list *LinkedList) GetItemsFromStart() []int {
-	var items []int
-	current := list.head
-	for current != nil {
-		items = append(items, current.data)
-		current = current.next
+func do_float() {
+	log.Println("\n----- Float Tests -----")
+
+	lli := &LinkedList[float64] {head: nil, tail: nil}
+	lli.InsertFirst(1.1)
+	lli.InsertLast(3.3)
+	lli.InsertLast(5.5)
+	lli.InsertLast(7.7)
+	log.Printf("Size of list is:%v\n", lli.GetSize())
+	x, ok := lli.GetFirst()
+	if ok {
+		log.Printf("Head value is: %v\n", x.Value())
+	} else {
+		log.Fatal("Head is missing")
 	}
-	return items
+
+	x, ok = lli.GetLast()
+	if ok {
+		log.Printf("Tail value is: %v\n", x.Value())
+	} else {
+		log.Fatal("Tail is missing")
+	}
+
+	log.Print("All items from head\n")
+	items := lli.GetItemsFromStart()
+	for i := range items {
+		log.Printf("Item %v=%v\n",i,items[i])
+		if ! lli.SearchValue(items[i]) {
+			log.Fatalf("Error! value %v not found\n",items[i])
+		}
+	}
+
+	if lli.SearchValue(-1) {
+		log.Fatalf("Error! non-existent value found: %v\n", -1)
+	}
+
+	log.Print("All items from tail (backwards)\n")
+	items = lli.GetItemsFromEnd()
+	for i := range items {
+		log.Printf("Item %v=%v\n",i,items[i])
+	}
+
+	// remove middle two values
+	if ok = lli.RemoveByIndex(1); !ok {
+		log.Fatal("Error! lli.RemoveByIndex(1)\n")
+	}
+
+	if ok = lli.RemoveByValue(5.5); !ok {
+		log.Fatal("Error! lli.RemoveByValue(5.5)\n")
+	}
+
+	log.Print("Final items after removals (should be 1.1 and 7.7)\n")
+	items = lli.GetItemsFromStart()
+	for i := range items {
+		log.Printf("Item %v=%v\n",i,items[i])
+	}
 }
 
-func (list *LinkedList) GetItemsFromEnd() []int {
-	var items []int
-	current := list.tail
-	for current != nil {
-		items = append(items, current.data)
-		current = current.prev
+func do_string() {
+	log.Println("\n----- String Tests -----")
+
+	lli := &LinkedList[string] {head: nil, tail: nil}
+	lli.InsertFirst("a")
+	lli.InsertLast("b")
+	lli.InsertLast("c")
+	lli.InsertLast("d")
+	log.Printf("Size of list is:%v\n", lli.GetSize())
+	x, ok := lli.GetFirst()
+	if ok {
+		log.Printf("Head value is: %v\n", x.Value())
+	} else {
+		log.Fatal("Head is missing")
 	}
-	return items
+
+	x, ok = lli.GetLast()
+	if ok {
+		log.Printf("Tail value is: %v\n", x.Value())
+	} else {
+		log.Fatal("Tail is missing")
+	}
+
+	log.Print("All items from head\n")
+	items := lli.GetItemsFromStart()
+	for i := range items {
+		log.Printf("Item %v=%v\n",i,items[i])
+		if ! lli.SearchValue(items[i]) {
+			log.Fatalf("Error! value %v not found\n",items[i])
+		}
+	}
+
+	if lli.SearchValue("z") {
+		log.Fatalf("Error! non-existent value found: %v\n", "z")
+	}
+
+	log.Print("All items from tail (backwards)\n")
+	items = lli.GetItemsFromEnd()
+	for i := range items {
+		log.Printf("Item %v=%v\n",i,items[i])
+	}
+
+	// remove middle two values
+	if ok = lli.RemoveByIndex(1); !ok {
+		log.Fatal("Error! lli.RemoveByIndex(1)\n")
+	}
+
+	if ok = lli.RemoveByValue("c"); !ok {
+		log.Fatal("Error! lli.RemoveByValue(\"c\")\n")
+	}
+
+	log.Print("Final items after removals (should be a and d)\n")
+	items = lli.GetItemsFromStart()
+	for i := range items {
+		log.Printf("Item %v=%v\n",i,items[i])
+	}
 }
-*/
