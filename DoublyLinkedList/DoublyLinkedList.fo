@@ -1,9 +1,6 @@
 package main
 
-func main() {
-	lli := &LinkedList[int]
-	lli.InsertFirst[int](1)
-}
+import "fmt"
 
 type Node[T] struct {
 	data T
@@ -16,8 +13,20 @@ type LinkedList[T] struct {
 	tail *Node[T]
 }
 
+func (list *LinkedList[T]) GetFirst() (*Node[T], bool) {
+	if list.head == nil {
+		return list.head, false
+	}
+	return list.head, true
+}
+
 func (list *LinkedList[T]) InsertFirst(i T) {
 	data := &Node[T]{data: i}
+	if list.tail == nil {
+		list.head = data
+		list.tail = data
+		return
+	}
 	if list.head != nil {
 		list.head.prev = data
 		data.next = list.head
@@ -25,9 +34,8 @@ func (list *LinkedList[T]) InsertFirst(i T) {
 	list.head = data
 }
 
-/*
-func (list *LinkedList) InsertLast(i int) {
-	data := &Node{data: i}
+func (list *LinkedList[T]) InsertLast(i T) {
+	data := &Node[T]{data: i}
 	if list.head == nil {
 		list.head = data
 		list.tail = data
@@ -40,6 +48,39 @@ func (list *LinkedList) InsertLast(i int) {
 	list.tail = data
 }
 
+func (list *LinkedList[T]) GetSize() int {
+	count := 0
+	current := list.head
+	for current != nil {
+		count += 1
+		current = current.next
+	}
+
+	return count
+}
+
+func (list *LinkedList[T]) GetItemsFromStart() []T {
+	var items []T
+	current := list.head
+	for current != nil {
+		items = append(items, current.data)
+		current = current.next
+	}
+	return items
+}
+
+func main() {
+	lli := &LinkedList[int] {head: nil, tail: nil}
+	lli.InsertFirst(1)
+	lli.InsertLast(11)
+	fmt.Printf("Size of list is:%v\n", lli.GetSize())
+	items := lli.GetItemsFromStart()
+	for i := range items {
+		fmt.Printf("Item %v=%v\n",i,items[i])
+	}
+}
+
+/*
 func (list *LinkedList) RemoveByValue(i int) bool {
 	if list.head == nil {
 		return false
