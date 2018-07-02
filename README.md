@@ -33,3 +33,32 @@ This creates a list that can be traversed head to tail or tail to head.
 Go does not have a keyword that represents the zero value. Thus `nil` can't be used, which was my first "natural" attempt. To work around this I added a method to the `Node` type called `Value()` which returns the data value in the node. I can't, however, provide an error to the caller. This new method plus careful code to avoid empty `Node`s mitigated this issue - at least for this particular case.
 
 *Observation Two* Once the generic port was done, it was trivial to use it for integers, floats, and strings. Worked perfectly and easy to understand and read.
+
+## Bubble Sort
+This uses a simple bubble sort agorighm to order a slice of type T.
+
+Without operator overloading, the sort code cannot use a `>` operation to test two slice elements. To overcome this, I added a new first argument which is a function to use as the comparator. To wit:
+```
+func bubbleSort[T](gt func(T,T) bool, array []T) {
+	swapCount := 1
+	for swapCount > 0 {
+		swapCount = 0
+		for itemIndex := 0; itemIndex < len(array)-1; itemIndex++ {
+            // use supplied function to evaluate two elements in slice
+			if gt(array[itemIndex], array[itemIndex+1]) { 
+				array[itemIndex], array[itemIndex+1] = array[itemIndex+1], array[itemIndex]
+				swapCount += 1
+			}
+		}
+	}
+}
+```
+
+Then to use, I call as follows (for floats):
+```
+	ra := []float64{4.4, 2.2, 3.3}
+	gtf := func(x,y float64) bool { return x > y }
+	bubbleSort[float64](gtf, ra)
+```
+
+*Observation* Most in the Go community find operator overloading to be less than satisfying, even dangerous. Providing a function to use instead compromises code readability, but not overly so, in my opinion.
