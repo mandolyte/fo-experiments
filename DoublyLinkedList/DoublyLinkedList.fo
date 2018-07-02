@@ -8,32 +8,27 @@ type Node[T] struct {
 	prev *Node[T]
 }
 
-func (n *Node[T]) Value() T {
-	return n.data
-}
-
-
 type LinkedList[T] struct {
 	head *Node[T]
 	tail *Node[T]
 }
 
-func (list *LinkedList[T]) GetFirst() (*Node[T], bool) {
+func (list *LinkedList[T]) GetFirst() (T, bool) {
 	if list.head == nil {
-		return list.head, false
+		return *new(T), false
 	}
-	return list.head, true
+	return list.head.data, true
 }
 
-func (list *LinkedList[T]) GetLast() (*Node[T], bool) {
+func (list *LinkedList[T]) GetLast() (T, bool) {
 	if list.head == nil {
-		return list.head, false
+		return *new(T), false
 	}
 	current := list.head
 	for current.next != nil {
 		current = current.next
 	}
-	return current, true
+	return current.data, true
 }
 
 func (list *LinkedList[T]) InsertFirst(i T) {
@@ -179,14 +174,14 @@ func do_int() {
 	log.Printf("Size of list is:%v\n", lli.GetSize())
 	x, ok := lli.GetFirst()
 	if ok {
-		log.Printf("Head value is: %v\n", x.Value())
+		log.Printf("Head value is: %v\n", x)
 	} else {
 		log.Fatal("Head is missing")
 	}
 
 	x, ok = lli.GetLast()
 	if ok {
-		log.Printf("Tail value is: %v\n", x.Value())
+		log.Printf("Tail value is: %v\n", x)
 	} else {
 		log.Fatal("Tail is missing")
 	}
@@ -237,14 +232,14 @@ func do_float() {
 	log.Printf("Size of list is:%v\n", lli.GetSize())
 	x, ok := lli.GetFirst()
 	if ok {
-		log.Printf("Head value is: %v\n", x.Value())
+		log.Printf("Head value is: %v\n", x)
 	} else {
 		log.Fatal("Head is missing")
 	}
 
 	x, ok = lli.GetLast()
 	if ok {
-		log.Printf("Tail value is: %v\n", x.Value())
+		log.Printf("Tail value is: %v\n", x)
 	} else {
 		log.Fatal("Tail is missing")
 	}
@@ -295,14 +290,14 @@ func do_string() {
 	log.Printf("Size of list is:%v\n", lli.GetSize())
 	x, ok := lli.GetFirst()
 	if ok {
-		log.Printf("Head value is: %v\n", x.Value())
+		log.Printf("Head value is: %v\n", x)
 	} else {
 		log.Fatal("Head is missing")
 	}
 
 	x, ok = lli.GetLast()
 	if ok {
-		log.Printf("Tail value is: %v\n", x.Value())
+		log.Printf("Tail value is: %v\n", x)
 	} else {
 		log.Fatal("Tail is missing")
 	}

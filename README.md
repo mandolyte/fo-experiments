@@ -29,7 +29,8 @@ This creates a list that can be traversed head to tail or tail to head.
     return 0.0, false // for floats
     return nil, false // for structs
 ```
-Go does not have a keyword that represents *any* zero value. Thus `nil` can't be used, which was my first "natural" attempt. To work around this I added a method to the `Node` type called `Value()` which returns the data value in the node. I can't, however, provide an error to the caller. This new method plus careful code to avoid empty `Node`s mitigated this issue - at least for this particular case. It would nicer to address this as part of a generics implementation. For example, suppose a new keyword named `zerovalue` was introduced, which is instantiated at compile time to a zero for integers, 0.0 for floats, "" for strings, and nil for structs. Then an error return would be simply `return zerovalue, false`.
+Go does not have a keyword that represents *any* zero value. However, the construct `*new(T)` works.
+More on this at https://github.com/golang/go/issues/19642.
 
 *Observation #2* Once the generic port was done, it was trivial to use it for integers, floats, and strings. Worked perfectly and easy to understand and read.
 

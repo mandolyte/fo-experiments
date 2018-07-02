@@ -20,16 +20,6 @@ type (
 	}
 )
 
-func (n *Node__float64) Value() float64 {
-	return n.data
-}
-func (n *Node__int) Value() int {
-	return n.data
-}
-func (n *Node__string) Value() string {
-	return n.data
-}
-
 type (
 	LinkedList__float64 struct {
 		head *Node__float64
@@ -45,54 +35,54 @@ type (
 	}
 )
 
-func (list *LinkedList__float64) GetFirst() (*Node__float64, bool) {
+func (list *LinkedList__float64) GetFirst() (float64, bool) {
 	if list.head == nil {
-		return list.head, false
+		return *new(float64), false
 	}
-	return list.head, true
+	return list.head.data, true
 }
-func (list *LinkedList__int) GetFirst() (*Node__int, bool) {
+func (list *LinkedList__int) GetFirst() (int, bool) {
 	if list.head == nil {
-		return list.head, false
+		return *new(int), false
 	}
-	return list.head, true
+	return list.head.data, true
 }
-func (list *LinkedList__string) GetFirst() (*Node__string, bool) {
+func (list *LinkedList__string) GetFirst() (string, bool) {
 	if list.head == nil {
-		return list.head, false
+		return *new(string), false
 	}
-	return list.head, true
+	return list.head.data, true
 }
 
-func (list *LinkedList__float64) GetLast() (*Node__float64, bool) {
+func (list *LinkedList__float64) GetLast() (float64, bool) {
 	if list.head == nil {
-		return list.head, false
+		return *new(float64), false
 	}
 	current := list.head
 	for current.next != nil {
 		current = current.next
 	}
-	return current, true
+	return current.data, true
 }
-func (list *LinkedList__int) GetLast() (*Node__int, bool) {
+func (list *LinkedList__int) GetLast() (int, bool) {
 	if list.head == nil {
-		return list.head, false
+		return *new(int), false
 	}
 	current := list.head
 	for current.next != nil {
 		current = current.next
 	}
-	return current, true
+	return current.data, true
 }
-func (list *LinkedList__string) GetLast() (*Node__string, bool) {
+func (list *LinkedList__string) GetLast() (string, bool) {
 	if list.head == nil {
-		return list.head, false
+		return *new(string), false
 	}
 	current := list.head
 	for current.next != nil {
 		current = current.next
 	}
-	return current, true
+	return current.data, true
 }
 
 func (list *LinkedList__float64) InsertFirst(i float64) {
@@ -476,14 +466,14 @@ func do_int() {
 	log.Printf("Size of list is:%v\n", lli.GetSize())
 	x, ok := lli.GetFirst()
 	if ok {
-		log.Printf("Head value is: %v\n", x.Value())
+		log.Printf("Head value is: %v\n", x)
 	} else {
 		log.Fatal("Head is missing")
 	}
 
 	x, ok = lli.GetLast()
 	if ok {
-		log.Printf("Tail value is: %v\n", x.Value())
+		log.Printf("Tail value is: %v\n", x)
 	} else {
 		log.Fatal("Tail is missing")
 	}
@@ -533,14 +523,14 @@ func do_float() {
 	log.Printf("Size of list is:%v\n", lli.GetSize())
 	x, ok := lli.GetFirst()
 	if ok {
-		log.Printf("Head value is: %v\n", x.Value())
+		log.Printf("Head value is: %v\n", x)
 	} else {
 		log.Fatal("Head is missing")
 	}
 
 	x, ok = lli.GetLast()
 	if ok {
-		log.Printf("Tail value is: %v\n", x.Value())
+		log.Printf("Tail value is: %v\n", x)
 	} else {
 		log.Fatal("Tail is missing")
 	}
@@ -590,14 +580,14 @@ func do_string() {
 	log.Printf("Size of list is:%v\n", lli.GetSize())
 	x, ok := lli.GetFirst()
 	if ok {
-		log.Printf("Head value is: %v\n", x.Value())
+		log.Printf("Head value is: %v\n", x)
 	} else {
 		log.Fatal("Head is missing")
 	}
 
 	x, ok = lli.GetLast()
 	if ok {
-		log.Printf("Tail value is: %v\n", x.Value())
+		log.Printf("Tail value is: %v\n", x)
 	} else {
 		log.Fatal("Tail is missing")
 	}
