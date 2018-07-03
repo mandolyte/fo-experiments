@@ -74,7 +74,7 @@ func New[T](sz int) *CircularBuffer[T] {
 }
 ```
 
-## Binary Search
+## Slice Search
 For this test, I used both `int`s and a custom type `Point`:
 ```
 type Point struct {
