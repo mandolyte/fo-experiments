@@ -94,3 +94,15 @@ type Comparators[T] struct {
 - Binary Search
 - Linear Search
 - Ternary Search
+
+For example, here is the simple linear search method:
+```
+func (bs *Comparators[T]) linearSearch(array []T, val T) int {
+	for index, value := range array {
+		if bs.equals(value, val) {
+			return index
+		}
+	}
+	return -1
+}
+```
