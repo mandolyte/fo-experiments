@@ -1,0 +1,120 @@
+package main
+
+import "fmt"
+
+type CircularBuffer[T] struct {
+	data    []T
+	pointer int
+	size int
+}
+
+func (b *CircularBuffer[T]) InsertValue(i T) {
+	if b.pointer == len(b.data) {
+		b.pointer = 0
+	}
+	b.data[b.pointer] = i
+	b.pointer += 1
+}
+
+func (b *CircularBuffer[T]) GetValues() []T {
+	return b.data
+}
+
+func (b *CircularBuffer[T]) GetValuesFromPosition(i int) ([]T, bool) {
+
+	if i >= b.size {
+		return nil, false
+	}
+
+	out := make([]T,b.size)
+	for u := 0; u < b.size; u++ {
+		if i >= b.size {
+			i = 0
+		}
+		out[u] = b.data[i]
+		i += 1
+	}
+	return out, true
+}
+
+func New[T](sz int) *CircularBuffer[T] {
+	cdata := make([]T,sz)
+	cb := &CircularBuffer[T]{data:cdata, pointer: 0, size:sz }
+	return cb
+}
+
+func main() {
+	do_int()
+	do_string()
+	do_float()
+}
+
+func do_int() {
+	cb := New[int](3)
+	cb.InsertValue(10)
+	cb.InsertValue(20)
+	cb.InsertValue(30)
+	cb.InsertValue(40)
+	cb.InsertValue(50)
+	cbslice := cb.GetValues()
+	fmt.Println("--- All Items ---")
+	for x := range cbslice {
+		fmt.Printf("Item %v = %v\n", x, cbslice[x])
+	}
+
+	fmt.Println("--- Items from end---")
+	cbslice, ok := cb.GetValuesFromPosition(2)
+	if ! ok {
+		fmt.Printf("Error: position too large: %v\n", 2)
+	}
+	for x := range cbslice {
+		fmt.Printf("Item %v = %v\n", x, cbslice[x])
+	}
+}
+
+func do_string() {
+	cb := New[string](3)
+	cb.InsertValue("ten")
+	cb.InsertValue("twenty")
+	cb.InsertValue("thirty")
+	cb.InsertValue("forty")
+	cb.InsertValue("fifty")
+	cbslice := cb.GetValues()
+	fmt.Println("--- All Items ---")
+	for x := range cbslice {
+		fmt.Printf("Item %v = %v\n", x, cbslice[x])
+	}
+
+	fmt.Println("--- Items from end---")
+	cbslice, ok := cb.GetValuesFromPosition(2)
+	if ! ok {
+		fmt.Printf("Error: position too large: %v\n", 2)
+	}
+	for x := range cbslice {
+		fmt.Printf("Item %v = %v\n", x, cbslice[x])
+	}
+}
+
+func do_float() {
+	cb := New[float64](3)
+	cb.InsertValue(10.10)
+	cb.InsertValue(20.20)
+	cb.InsertValue(30.30)
+	cb.InsertValue(40.40)
+	cb.InsertValue(50.50)
+	cbslice := cb.GetValues()
+	fmt.Println("--- All Items ---")
+	for x := range cbslice {
+		fmt.Printf("Item %v = %v\n", x, cbslice[x])
+	}
+
+	fmt.Println("--- Items from end---")
+	cbslice, ok := cb.GetValuesFromPosition(2)
+	if ! ok {
+		fmt.Printf("Error: position too large: %v\n", 2)
+	}
+	for x := range cbslice {
+		fmt.Printf("Item %v = %v\n", x, cbslice[x])
+	}
+}
+
