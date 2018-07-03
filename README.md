@@ -90,4 +90,7 @@ type Comparators[T] struct {
 }
 ```
 
-*Observation* This worked well and could easily be extended to provide other search methods as well. There a number of search algorithms in the source repo and they could implemented as other methods on this same `Comparator` type.
+*Observation* This worked well and I easily extended this to provide other search methods as well. There a number of search algorithms in the source repo and I implemented these:
+- Binary Search
+- Linear Search
+- Ternary Search
